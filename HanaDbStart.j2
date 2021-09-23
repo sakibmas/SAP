@@ -1,0 +1,11 @@
+#!/bin/sh
+. ~/.profile
+sapcontrol -nr "{{ dbnr }}" -function StartSystem HDB
+
+hproc=$(sapcontrol -nr "{{ dbnr }}" -function GetProcessList | grep GREEN | wc -l)
+
+while [ $hproc -lt 7 ]
+do 
+  sleep 30s
+  hproc=$(sapcontrol -nr "{{ dbnr }}" -function GetProcessList | grep GREEN | wc -l)
+done

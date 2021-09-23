@@ -1,0 +1,22 @@
+#!/bin/sh
+. ~/.profile
+SrState=$(hdbnsutil -sr_state )
+Chk1=$(echo "$SrState" | grep "^online" | cut -d ':' -f 2 | sed 's/^ //g')
+Chk2=$(echo "$SrState" | grep "^is secondary/consumer system" | cut -d ':' -f 2 | sed 's/^ //g')
+
+
+if [ $Chk1 == "true" -a $Chk2 == "true" ]
+then
+ hdbnsutil -sr_takeover
+
+ hproc=$(sapcontrol -nr {{ dbnr }} -function GetProcessList | grep GREEN | wc -l)
+
+ while [ $hproc -lt 7 ]
+ do
+  echo -n .
+  sleep 30s
+  hproc=$(sapcontrol -nr {{ dbnr }} -function GetProcessList | grep GREEN | wc -l)
+ done
+
+fi
+

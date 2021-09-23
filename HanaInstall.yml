@@ -1,0 +1,71 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+   - yum_repository:
+      name: local
+      description: local
+      baseurl: http://rhelrepo.bergerbd.com
+      gpgcheck: no
+   - name: Install require binaries
+     yum:
+      name: 
+       - tcsh
+       - uuidd
+       - util-linux
+       - net-tools
+       - cifs-utils
+       - bind-utils
+       - shadow-utils
+       - yum-utils
+       - vim
+       - ntpdate
+       - libatomic
+       - compat-sap-c++-7
+       - libaio
+       - libtool-ltdl
+      state: present
+   - name: set timezone to {{ timezone }}
+     timezone:
+      name: "{{ timezone }}"
+   - name: configure ntpdate
+     copy:
+      content: "pntp.bergerbd.com\n"
+      dest: /etc/ntp/step-tickers
+   - name: ensure ntpdate is running
+     service:
+      name: ntpdate
+      enabled: yes
+      state: started
+   - name: disable firewalld service
+     service:
+      name: firewalld
+      enabled: no
+      state: stopped
+   - name: Create /etc/smbcredentials directory
+     file:
+      path: /etc/smbcredentials
+      state: directory
+   - name: copy samba credential
+     copy:
+      content: "username=administrator\npassword={{ smb_pwd }}\ndomain=bpblfile\n"
+      dest: "/etc/smbcredentials/bpblfile.cred"
+      mode: '0600'
+   - name: Create software directory
+     file:
+      path: /mnt/software
+      state: directory
+   - name: Mount software source folder
+     mount: 
+      state: mounted
+      fstype: cifs 
+      opts: "vers=3.0,credentials=/etc/smbcredentials/bpblfile.cred,gid=79"
+      src: "//bpblfile.bergerbd.com/software/SAP_Server"
+      path: "/mnt/software"
+   - template:
+      src: HanaInstall.j2
+      dest: ~/HanaInstall.sh
+      mode: u+x,g+x,o+x
+   - shell: ~/HanaInstall.sh
+     ignore_errors: yes
+     register: cmd1
+   - debug: msg="{{ cmd1.stdout_lines }}"

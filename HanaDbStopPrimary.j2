@@ -1,0 +1,24 @@
+#!/bin/sh
+. ~/.profile
+SrState=$(hdbnsutil -sr_state )
+Chk1=$(echo "$SrState" | grep "^online" | cut -d ':' -f 2 | sed 's/^ //g')
+Chk2=$(echo "$SrState" | grep "^mode" | cut -d ':' -f 2 | sed 's/^ //g')
+
+cdpy
+SrStatus=$(python systemReplicationStatus.py )
+Chk3=$(echo "$SrStatus" | grep "^overall system replication status" | cut -d ':' -f 2 | sed 's/^ //g')
+
+if [ $Chk1 == "true" -a $Chk2 == "primary" -a $Chk3 == "ACTIVE" ]
+then
+ sapcontrol -nr {{ dbnr }} -function StopSystem HDB
+ 
+ sleep 30s
+ hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l )
+ 
+
+ while [ $hproc -gt 1 ]
+ do 
+  sleep 30s
+  hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l ) 
+ done
+fi

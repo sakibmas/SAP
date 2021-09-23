@@ -1,0 +1,15 @@
+---
+- hosts: "{{ host }}"
+  user: root
+  become_user: "{{ dbadm }}"
+  gather_facts: yes
+  tasks:
+   - template:
+      src: /home/bpbl/HanaDbTakeOverSecondary.j2
+      dest: ~/HanaDbTakeOverSecondary.sh
+      mode: 0755
+   - shell: ~/HanaDbTakeOverSecondary.sh
+     ignore_errors: yes
+     register: cmd2
+   - debug: msg="{{ cmd2.stdout_lines }}"
+...

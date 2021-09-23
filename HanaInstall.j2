@@ -1,0 +1,12 @@
+cd {{ hanadbsrc }}
+
+./hdblcm --action=install --dump_configfile_template={{ hanaconfdump}}
+sed -i 's/sid=/sid='{{ hsysid }}'/g' {{ hanaconfdump }}
+sed -i 's/number=/number='{{ dbnr }}'/g' {{ hanaconfdump }}
+sed -i 's/^password=/password='{{ syspwd }}'/g' {{ hanaconfdump }}
+sed -i 's/^restrict_max_mem=/restrict_max_mem=y/g' {{ hanaconfdump }}
+sed -i 's/^max_mem=/max_mem={{ max_memory }}/g' {{ hanaconfdump }}
+sed -i 's/^system_user_password=/system_user_password='{{ sysupwd }}'/g' {{ hanaconfdump }}
+sed -i 's/^sapadm_password=/sapadm_password='{{ admpwd }}'/g' {{ hanaconfdump }}
+
+./hdblcm --action=install --configfile={{ hanaconfdump }} --batch

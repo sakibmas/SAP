@@ -1,0 +1,59 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+   - yum_repository:
+      name: local
+      description: local
+      baseurl: http://rhelrepo.bergerbd.com
+      gpgcheck: no
+   - name: Install require binaries
+     yum:
+      name: 
+       - tcsh
+       - uuidd
+       - util-linux
+       - net-tools
+       - cifs-utils
+       - bind-utils
+       - shadow-utils
+       - yum-utils
+       - vim
+       - ntpdate
+       - libatomic
+       - compat-sap-c++-7
+       - libaio
+       - libtool-ltdl
+      state: present
+   - service:
+      name: firewalld
+      enabled: no
+      state: stopped
+   - name: Create /etc/smbcredentials directory
+     file:
+      path: /etc/smbcredentials
+      state: directory
+   - name: copy samba credential
+     copy:
+      content: "username=bpblstd\npassword={{ smb_pwd }}"
+      dest: "/etc/smbcredentials/bpblstd.cred"
+      mode: '0600'
+   - name: Create software directory
+     file:
+      path: /mnt/software
+      state: directory
+   - name: Mount software source folder
+     mount: 
+      state: mounted
+      fstype: cifs 
+      opts: "vers=3.0,credentials=/etc/smbcredentials/bpblstd.cred,gid=79"
+      src: "//bpblstd.file.core.windows.net/software"
+      path: "/mnt/software"
+   - template:
+      src: HanaInstallAzure.j2
+      dest: ~/HanaInstall.sh
+      mode: u+x,g+x,o+x
+   - shell: ~/HanaInstall.sh
+     ignore_errors: yes
+     register: cmd1
+   - debug: msg="{{ cmd1.stdout_lines }}"
+...
