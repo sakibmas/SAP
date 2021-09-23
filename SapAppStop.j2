@@ -1,0 +1,12 @@
+#!/bin/sh
+. ~/.profile
+sapcontrol -nr {{ appnr }} -function StopSystem ABAP
+
+sleep 30s
+hproc=$(sapcontrol -nr {{ appnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l)
+
+while [ $hproc -gt 2 ]
+do 
+  sleep 30s
+  hproc=$(sapcontrol -nr {{ appnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l)
+done

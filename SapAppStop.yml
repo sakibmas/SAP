@@ -1,0 +1,15 @@
+---
+- hosts: "{{ host }}"
+  user: root
+  become_user: "{{ appadm }}"
+  gather_facts: yes
+  tasks:
+   - template:
+      src: /home/bpbl/SapAppStop.j2
+      dest: ~/SapAppStop.sh
+      mode: 0755
+   - shell: ~/SapAppStop.sh
+     ignore_errors: yes
+     register: cmd2
+   - debug: msg="{{ cmd2.stdout_lines }}"
+...
