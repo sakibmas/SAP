@@ -5,7 +5,7 @@
   gather_facts: yes
   tasks:
    - template:
-      src: ./SapAppStop.j2
+      src: SapAppStop.j2
       dest: ~/SapAppStop.sh
       mode: 0755
    - shell: ~/SapAppStop.sh
