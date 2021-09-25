@@ -5,7 +5,7 @@
   gather_facts: yes
   tasks:
    - template:
-      src: /home/bpbl/HanaDbStopPrimary.j2
+      src: HanaDbStopPrimary.j2
       dest: ~/HanaDbStopPrimary.sh
       mode: 0755
    - shell: ~/HanaDbStopPrimary.sh
