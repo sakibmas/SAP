@@ -1,0 +1,28 @@
+---
+- hosts: "{{ host }}"
+  become: yes
+  tasks:
+   - name: install leapp
+     yum:
+      name:
+       - leapp
+       - leapp-repository
+       - cifs-utils
+      state: present
+   - name: Create leapp files directory
+     file:
+      path: /etc/leapp/files
+      state: directory
+   - name: extract tar file
+     unarchive:
+      src: leapp-data14.tar.gz
+      dest: /etc/leapp/files
+      remote_src: yes
+   - name: Permit Root Login
+     lineinfile:
+      regexp: '^#PermitRootLogin'
+      line: 'PermitRootLogin yes'
+      path: /etc/ssh/sshd_config
+   - name: Create leapp answer
+     shell: leapp answer --section remove_pam_pkcs11_module_check.confirm=True
+...
