@@ -28,26 +28,10 @@
       name: firewalld
       enabled: no
       state: stopped
-   - name: Create /etc/smbcredentials directory
-     file:
-      path: /etc/smbcredentials
-      state: directory
-   - name: copy samba credential
-     copy:
-      content: "username=bpblstd\npassword={{ smb_pwd }}"
-      dest: "/etc/smbcredentials/bpblstd.cred"
-      mode: '0600'
-   - name: Create software directory
-     file:
-      path: /mnt/software
-      state: directory
-   - name: Mount software source folder
-     mount: 
-      state: mounted
-      fstype: cifs 
-      opts: "vers=3.0,credentials=/etc/smbcredentials/bpblstd.cred,gid=79"
-      src: "//bpblstd.file.core.windows.net/software"
-      path: "/mnt/software"
+   - name: Mount azure storage
+     import_tasks: MountAzure.yml
+     tags:
+      - mount
    - template:
       src: HanaInstallAzure.j2
       dest: ~/HanaInstall.sh
