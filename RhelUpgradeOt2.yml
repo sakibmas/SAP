@@ -24,4 +24,56 @@
       path: /etc/ssh/sshd_config
    - name: Create leapp answer
      shell: leapp answer --section remove_pam_pkcs11_module_check.confirm=True
+   - name: Search floppy module
+     shell: lsmod | grep floppy
+     register: kernelmod1
+     ignore_errors: yes
+     tags:
+      - floppy
+   - name: Grep GRUB_CMDLINE_LINUX
+     shell: grep GRUB_CMDLINE_LINUX /etc/default/grub
+     register: grub1
+     tags:
+      - floppy
+   - name: blacklist floppy
+     shell: sed -i '/^GRUB_CMDLINE_LINUX=/s/"$/ floppy.blacklist=1 rd.driver.blacklist=floppy"/' /etc/default/grub
+     when:
+      - grub1.stdout is not search("floppy.blacklist=1")
+      - kernelmod1.stdout is search("floppy")
+     tags:
+      - floppy
+   - name: Search pata_acpi module
+     shell: lsmod | grep pata_acpi
+     register: kernelmod2
+     ignore_errors: yes
+     tags:
+      - acpi
+   - name: Grep GRUB_CMDLINE_LINUX
+     shell: grep GRUB_CMDLINE_LINUX /etc/default/grub
+     register: grub2
+     ignore_errors: yes
+     tags:
+      - acpi
+   - name: blacklist pata_acpi
+     shell: sed -i '/^GRUB_CMDLINE_LINUX=/s/"$/ pata_acpi.blacklist=1 rd.driver.blacklist=pata_acpi"/' /etc/default/grub
+     when:
+      - kernelmod2.stdout is search("pata_acpi")
+      - grub2.stdout is not search("pata_acpi.blacklist=1")
+     tags:
+      - acpi
+   - name: Grep GRUB_CMDLINE_LINUX
+     shell: grep GRUB_CMDLINE_LINUX /etc/default/grub
+     register: grub3
+     tags:
+      - review
+   - name: View GRUB_CMDLINE_LINUX
+     debug:
+      var: grub3.stdout_lines
+     tags:
+      - review
+   - name: Reconfigure grub
+     shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+   - name: Reboot the machine (Wait for 2 min)
+     reboot:
+      reboot_timeout: 120
 ...
