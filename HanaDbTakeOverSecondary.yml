@@ -5,7 +5,7 @@
   gather_facts: yes
   tasks:
    - template:
-      src: /home/bpbl/HanaDbTakeOverSecondary.j2
+      src: HanaDbTakeOverSecondary.j2
       dest: ~/HanaDbTakeOverSecondary.sh
       mode: 0755
    - shell: ~/HanaDbTakeOverSecondary.sh
