@@ -17,7 +17,6 @@
      unarchive:
       src: leapp-data14.tar.gz
       dest: /etc/leapp/files
-      remote_src: yes
    - name: Permit Root Login
      lineinfile:
       regexp: '^#PermitRootLogin'
