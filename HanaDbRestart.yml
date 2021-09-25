@@ -4,12 +4,8 @@
   become_user: "{{ dbadm }}"
   gather_facts: yes
   tasks:
-   - template:
-      src: HanaDbRestart.j2
-      dest: ~/HanaDbRestart.sh
-      mode: 0755
-   - shell: ~/HanaDbRestart.sh
-     ignore_errors: yes
-     register: cmd2
-   - debug: msg="{{ cmd2.stdout_lines }}"
+   - name: Restart Hana Database
+     import_tasks: 
+      - HanaDbStop.yml
+      - HanaDbStart.yml
 ...
