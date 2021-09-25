@@ -45,15 +45,21 @@
      file:
       path: /etc/smbcredentials
       state: directory
+     tags:
+      - mount
    - name: copy samba credential
      copy:
       content: "username=administrator\npassword={{ smb_pwd }}\ndomain=bpblfile\n"
       dest: "/etc/smbcredentials/bpblfile.cred"
       mode: '0600'
+     tags:
+      - mount
    - name: Create software directory
      file:
       path: /mnt/software
       state: directory
+     tags:
+      - mount
    - name: Mount software source folder
      mount: 
       state: mounted
@@ -61,6 +67,8 @@
       opts: "vers=3.0,credentials=/etc/smbcredentials/bpblfile.cred,gid=79"
       src: "//bpblfile.bergerbd.com/software/SAP_Server"
       path: "/mnt/software"
+     tags:
+      - mount
    - template:
       src: HanaInstall.j2
       dest: ~/HanaInstall.sh
