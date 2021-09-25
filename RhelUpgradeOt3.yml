@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host }}"
+  become: yes
+  tasks:
+   - name: Update grub
+     import_tasks: RhelUpgradeGrub.yml 
+     when:
+      - ansible_facts['distribution'] == "RedHat"
+      - ansible_facts['distribution_version'] == "7.7"
+...
