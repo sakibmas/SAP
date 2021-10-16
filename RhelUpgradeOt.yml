@@ -31,7 +31,7 @@
      loop:
       - rhel-7-server-e4s-rpms
       - rhel-sap-for-rhel-7-server-e4s-rpms
-      #- rhel-sap-hana-for-rhel-7-server-e4s-rpms
+      - rhel-sap-hana-for-rhel-7-server-e4s-rpms
       - rhel-7-server-extras-rpms
    - name: Run yum update
      yum:
