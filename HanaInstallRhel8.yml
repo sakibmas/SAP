@@ -1,0 +1,45 @@
+---
+- hosts: "{{ host }}"
+  roles:
+   - rhel-system-roles.timesync
+  tasks:
+   - name: Add rhel repository
+     import_tasks: AddRepoRH8.yml
+     tags:
+      - repo
+   - name: Install require binaries
+     yum:
+      name: 
+       - tcsh
+       - uuidd
+       - util-linux
+       - net-tools
+       - cifs-utils
+       - bind-utils
+       - shadow-utils
+       - yum-utils
+       - libatomic
+       - compat-sap-c++-9
+       - libaio
+       - libtool-ltdl
+       - libnsl
+      state: present
+     tags:
+      - prereq
+   - name: disable firewalld service
+     service:
+      name: firewalld
+      enabled: no
+      state: stopped
+   - name: Mount softwares from bpblfile server
+     import_tasks: MountSoftware.yml
+     tags:
+      - mount
+   - template:
+      src: HanaInstall.j2
+      dest: ~/HanaInstall.sh
+      mode: u+x,g+x,o+x
+   - shell: ~/HanaInstall.sh
+     ignore_errors: yes
+     register: cmd1
+   - debug: msg="{{ cmd1.stdout_lines }}"

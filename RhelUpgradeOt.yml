@@ -29,16 +29,17 @@
       name: "{{ item }}"
       state: enabled
      loop:
-      - rhel-7-server-rpms
       - rhel-7-server-e4s-rpms
       - rhel-sap-for-rhel-7-server-e4s-rpms
-      - rhel-sap-hana-for-rhel-7-server-e4s-rpms
+      #- rhel-sap-hana-for-rhel-7-server-e4s-rpms
       - rhel-7-server-extras-rpms
    - name: Run yum update
      yum:
       name: "*"
       releasever: "7.7"
       state: latest
+     notify: Reboot the machine (Wait for 2 min)
+  handlers:
    - name: Reboot the machine (Wait for 2 min)
      reboot:
       reboot_timeout: 120

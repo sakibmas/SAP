@@ -6,6 +6,8 @@
      shell: grub2-mkconfig -o /boot/grub2/grub.cfg
      tags:
       - execute
+     notify: Reboot the machine (Wait for 2 min)
+  handlers:
    - name: Reboot the machine (Wait for 2 min)
      reboot:
       reboot_timeout: 120

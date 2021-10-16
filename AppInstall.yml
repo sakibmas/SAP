@@ -1,0 +1,46 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+   - yum_repository:
+      name: local
+      description: local
+      baseurl: http://rhelrepo.bergerbd.com
+      gpgcheck: no
+   - name: Install require binaries
+     yum:
+      name: 
+       - tcsh
+       - uuidd
+       - util-linux
+       - net-tools
+       - cifs-utils
+       - bind-utils
+       - shadow-utils
+       - yum-utils
+       - ntpdate
+       - libatomic
+       - compat-sap-c++-7
+       - libaio
+       - libtool-ltdl
+      state: present
+   - name: set timezone to {{ timezone }}
+     timezone:
+      name: "{{ timezone }}"
+   - name: configure ntpdate
+     copy:
+      content: "pntp.bergerbd.com\n"
+      dest: /etc/ntp/step-tickers
+   - name: ensure ntpdate is running
+     service:
+      name: ntpdate
+      enabled: yes
+      state: started
+   - name: disable firewalld service
+     service:
+      name: firewalld
+      enabled: no
+      state: stopped
+   - name: Mount softwares from bpblfile server
+     import_tasks: MountSoftware.yml
+     tags:
+      - mount

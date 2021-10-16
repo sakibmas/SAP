@@ -5,7 +5,7 @@
       state: directory
    - name: copy samba credential
      copy:
-      content: "username=bpblstd\npassword={{ smb_pwd }}"
+      content: "username=bpblstd\npassword={{ azure_pwd }}"
       dest: "/etc/smbcredentials/bpblstd.cred"
       mode: '0600'
    - name: Create software directory

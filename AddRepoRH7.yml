@@ -1,0 +1,21 @@
+---
+  - name: install local repository
+    yum_repository:
+     name: local
+     description: local
+     baseurl: http://rhelrepo.bergerbd.com
+     gpgcheck: no
+    when:
+     - ansible_facts['distribution_major_version'] == "7"
+     - ansible_facts['distribution'] == "RedHat"
+  - name: Install epel repository
+    yum:
+     name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+     state: present
+    when:
+     - ansible_facts['distribution_major_version'] == "7"
+     - ansible_facts['distribution'] == "RedHat"
+  - yum:
+     security: yes
+     state: latest
+...
