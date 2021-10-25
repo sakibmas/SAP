@@ -1,12 +1,16 @@
 ---
 - hosts: "{{ host }}"
-  roles:
-   - rhel-system-roles.timesync
   tasks:
    - name: Add rhel repository
      import_tasks: AddRepoRH8.yml
      tags:
       - repo
+     when:
+      - ansible_facts['distribution_major_version'] == "8"
+      - ansible_facts['distribution'] == "RedHat"
+   - name: Configure ntp
+     import_role:
+      name: rhel-system-roles.timesync
    - name: Install require binaries
      yum:
       name: 

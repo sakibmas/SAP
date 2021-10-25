@@ -1,18 +1,16 @@
 ---
 - hosts: "{{ host }}"
-  roles:
-   - rhel-system-roles.timesync
   tasks:
-   - yum_repository:
-      name: local
-      description: local
-      baseurl: http://rhelrepo.bergerbd.com
-      gpgcheck: no
+   - name: Add RHEL 8 repository
+     import_tasks: AddRepoRH8.yml
      when:
-      - ansible_facts['distribution_major_version'] == "7"
+      - ansible_facts['distribution_major_version'] == "8"
       - ansible_facts['distribution'] == "RedHat"
      tags:
       - repo
+   - name: Configure ntp
+     import_role:
+      name: rhel-system-roles.timesync
    - name: Install require binaries
      yum:
       name: 
@@ -25,25 +23,13 @@
        - shadow-utils
        - yum-utils
        - libatomic
-       - compat-sap-c++-7
+       - compat-sap-c++-9
        - libaio
        - libtool-ltdl
-       - ntpdate
+       - libnsl
       state: present
      tags:
       - prereq
-   - name: set timezone to {{ timezone }}
-     timezone:
-      name: "{{ timezone }}"
-   - name: configure ntpdate
-     copy:
-      content: "pntp.bergerbd.com\n"
-      dest: /etc/ntp/step-tickers
-   - name: ensure ntpdate is running
-     service:
-      name: ntpdate
-      enabled: yes
-      state: started
    - name: disable firewalld service
      service:
       name: firewalld
