@@ -18,7 +18,6 @@
        - uuidd
        - util-linux
        - net-tools
-       - cifs-utils
        - bind-utils
        - shadow-utils
        - yum-utils
@@ -38,7 +37,11 @@
    - name: Mount softwares from bpblfile server
      import_tasks: MountSoftware.yml
      tags:
-      - mount
+      - software
+   - name: Mount backup directory from bpblfile server
+     import_tasks: MountBackup.yml
+     tags:
+      - backup
    - template:
       src: HanaInstall.j2
       dest: ~/HanaInstall.sh

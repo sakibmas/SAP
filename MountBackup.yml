@@ -15,14 +15,14 @@
       mode: '0600'
    - name: Create software directory
      file:
-      path: /mnt/bpblfile
+      path: /hana/backup
       state: directory
-   - name: Mount software source folder
+   - name: Mount backup path
      mount: 
       state: mounted
       fstype: cifs 
       opts: "vers=3.0,credentials=/etc/smbcredentials/bpblfile.cred,gid=79"
-      src: "//bpblfile.bergerbd.com/software/SAP_Server"
-      path: "/mnt/bpblfile"
+      src: "//bpblfile.bergerbd.com/sapbackup/SOLMAN"
+      path: "/hana/backup"
       backup: yes
 ...
