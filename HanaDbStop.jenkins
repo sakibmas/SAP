@@ -4,16 +4,7 @@ pipeline {
     stages {
         stage('Print the variable') {
             steps {
-                // in groovy
-                echo "${env.hostname}"
-                
-                //in shell
-                sh 'echo $hostname'
-                
-                // in groovy script 
-                script {
-                    print env.hostname
-                }
+                sh 'echo ansible-playbook HanaDbStop.yml -e "host=$hostname"'
             }
         }
     }
