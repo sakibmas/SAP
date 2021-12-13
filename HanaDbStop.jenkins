@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Stop the HANA database') {
             steps {
-                sh 'whoami'
-                sh 'echo ansible-playbook HanaDbStop.yml -e "host=$hostname"'
+                sh 'ansible-playbook HanaDbStop.yml -e "host=$hostname"'
             }
         }
     }
