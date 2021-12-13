@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Print the variable') {
             steps {
-                sh 'echo ansible-playbook HanaDbStop.yml -e "host=$hostname"'
+                sh 'ansible-playbook HanaDbStop.yml -e "host=$hostname"'
             }
         }
     }
