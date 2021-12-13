@@ -1,2 +1,20 @@
-#!/bin/bash
-echo $hostname
+
+pipeline {
+    agent any;
+    stages {
+        stage('access env variable') {
+            steps {
+                // in groovy
+                echo "${env.hostname}"
+                
+                //in shell
+                sh 'echo $hostname'
+                
+                // in groovy script 
+                script {
+                    print env.hostname
+                }
+            }
+        }
+    }
+}
