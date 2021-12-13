@@ -2,7 +2,7 @@
 pipeline {
     agent any;
     stages {
-        stage('access env variable') {
+        stage('Print the variable') {
             steps {
                 // in groovy
                 echo "${env.hostname}"
