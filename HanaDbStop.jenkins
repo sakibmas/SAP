@@ -2,9 +2,10 @@
 pipeline {
     agent any;
     stages {
-        stage('Print the variable') {
+        stage('Stop the HANA database') {
             steps {
-                sh 'ansible-playbook HanaDbStop.yml -e "host=$hostname"'
+                sh 'whoami'
+                sh 'echo ansible-playbook HanaDbStop.yml -e "host=$hostname"'
             }
         }
     }
