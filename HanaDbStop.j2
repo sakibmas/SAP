@@ -3,10 +3,10 @@
 . ~/.profile
 sapcontrol -nr {{ dbnr }} -function StopSystem HDB
 
-hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l )
+#hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l )
 
-while [ $hproc -gt 1 ]
-do 
-  sleep 5s
-  hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l ) 
-done
+#while [ $hproc -gt 1 ]
+#do 
+#  sleep 5s
+#  hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l ) 
+#done
