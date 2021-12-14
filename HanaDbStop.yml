@@ -8,7 +8,7 @@
       src: HanaDbStop.j2
       dest: ~/HanaDbStop.sh
       mode: 0755
-   - shell: ~/HanaDbStop.sh
+   - command: ~/HanaDbStop.sh
      ignore_errors: yes
      register: cmd2
    - debug: msg="{{ cmd2.stdout_lines }}"
