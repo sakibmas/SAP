@@ -3,12 +3,10 @@
 . ~/.profile
 sapcontrol -nr {{ dbnr }} -function StopSystem HDB
 
-sleep 60s
 hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l )
-echo "Number of running database process is $hproc"
 
 while [ $hproc -gt 1 ]
 do 
-  sleep 30s
+  sleep 5s
   hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l ) 
 done
