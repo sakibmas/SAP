@@ -1,14 +1,6 @@
 pipeline {
     agent {label 'clab'};
     stages {
-        stage('Clone git repository') {
-            steps {
-                sh 'pwd'
-                sh 'ls -alh'
-                sh 'if [ -d SAP ] ; then cd SAP ; git fetch ; fi'
-                sh 'if [ ! -d SAP ] ; then git clone git@github.com:sakibmas/SAP.git ; fi'
-            }
-        }
         stage('Stop the HANA database') {
             steps {
                 sh 'ansible-playbook SAP/HanaDbStop.yml -e "host=$hostname"'
