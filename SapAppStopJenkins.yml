@@ -1,0 +1,15 @@
+---
+- hosts: "{{ host }}"
+  user: root
+  become_user: "{{ appadm }}"
+  gather_facts: yes
+  tasks:
+   - template:
+      src: SapAppStopJenkins.j2
+      dest: ~/SapAppStopJenkins.sh
+      mode: 0755
+   - shell: ~/SapAppStopJenkins.sh
+     ignore_errors: yes
+     register: cmd2
+   - debug: msg="{{ cmd2.stdout_lines }}"
+...
