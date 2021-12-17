@@ -23,6 +23,6 @@
         mode: 0755
    - shell: ~/SapAppProcessJenkins.sh
      ignore_errors: yes
-     register: cmd1
-   - debug: msg="{{ cmd1.stdout_lines }}"
+     register: cmd2
+   - debug: msg="{{ cmd2.stdout_lines }}"
 ...
