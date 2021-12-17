@@ -1,0 +1,29 @@
+---
+- hosts: "{{ host }}"
+  user: root
+  become_user: "{{ dbadm }}"
+  gather_facts: yes
+  tasks:
+   - name:
+     template:
+      src: HanaDbStopJenkins.j2
+      dest: ~/HanaDbStopJenkins.sh
+      mode: 0755
+   - name:
+     shell: ~/HanaDbStopJenkins.sh
+     register: cmd1
+   - debug: msg="{{ cmd1.stdout_lines }}"
+   - name: Pause for 10 minutes to stop application
+     pause:
+      minutes: 10
+   - name: Create script to get process status of database
+     template:
+        src: HanaDbProcessJenkins.j2
+        dest: ~/HanaDbProcessJenkins.sh
+        mode: 0755
+   - name: Execute script to get process status database
+     shell: ~/HanaDbProcessJenkins.sh
+     ignore_errors: yes
+     register: cmd2
+   - debug: msg="{{ cmd2.stdout_lines }}"
+...
