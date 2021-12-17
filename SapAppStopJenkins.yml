@@ -4,12 +4,13 @@
   become_user: "{{ appadm }}"
   gather_facts: yes
   tasks:
-   - name: Create script to SAP application
+   - name: Create script to stop SAP application
      template:
       src: SapAppStopJenkins.j2
       dest: ~/SapAppStopJenkins.sh
       mode: 0755
-   - shell: ~/SapAppStopJenkins.sh
+   - name: Execute script to stop SAP application
+     shell: ~/SapAppStopJenkins.sh
      ignore_errors: yes
      register: cmd1
    - debug: msg="{{ cmd1.stdout_lines }}"
@@ -21,7 +22,8 @@
         src: SapAppProcessJenkins.j2
         dest: ~/SapAppProcessJenkins.sh
         mode: 0755
-   - shell: ~/SapAppProcessJenkins.sh
+   - name: Execute script to get process status SAP application
+     shell: ~/SapAppProcessJenkins.sh
      ignore_errors: yes
      register: cmd2
    - debug: msg="{{ cmd2.stdout_lines }}"
