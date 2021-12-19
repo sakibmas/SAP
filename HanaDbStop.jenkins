@@ -1,9 +1,14 @@
 pipeline {
-    agent any;
+    agent {label 'clab'}};
     stages {
+        stage('Git clone') {
+            steps {
+              sh 'ansible-playbook HanaDbStopV2.yml -e "host=$hostname"'
+            }
+        }
         stage('Stop the HANA database') {
             steps {
-                sh 'ansible-playbook HanaDbStop.yml -e "host=$hostname"'
+                sh 'ansible-playbook HanaDbStopV2.yml -e "host=$hostname"'
             }
         }
     }
