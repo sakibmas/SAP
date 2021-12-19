@@ -9,7 +9,6 @@
       dest: ~/HanaDbStopV2.sh
       mode: 0755
    - shell: ~/HanaDbStopV2.sh
-     ignore_errors: yes
      register: cmd2
    - debug: msg="{{ cmd2.stdout_lines }}"
 ...
