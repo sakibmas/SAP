@@ -8,7 +8,7 @@
       src: HanaDbStopV2.j2
       dest: ~/HanaDbStopV2.sh
       mode: 0755
-   - command: ls -l ~
+   - command: ~/HanaDbStopV2.sh
      register: cmd1
    - debug: msg="{{ cmd1.stdout_lines }}"
 ...
