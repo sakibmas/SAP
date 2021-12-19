@@ -8,9 +8,7 @@
       src: HanaDbStopV2.j2
       dest: ~/HanaDbStopV2.sh
       mode: 0755
-   - script:
-      cmd: ~/HanaDbStopV2.sh
-      remote_src: yes
-     register: cmd2
-   - debug: msg="{{ cmd2.stdout_lines }}"
+   - command: ~/HanaDbStopV2.sh
+     register: cmd1
+   - debug: msg="{{ cmd1.stdout_lines }}"
 ...
