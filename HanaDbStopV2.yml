@@ -1,0 +1,15 @@
+---
+- hosts: "{{ host }}"
+  user: root
+  become_user: "{{ dbadm }}"
+  gather_facts: yes
+  tasks:
+   - template:
+      src: HanaDbStopV2.j2
+      dest: ~/HanaDbStopV2.sh
+      mode: 0755
+   - shell: ~/HanaDbStopV2.sh
+     ignore_errors: yes
+     register: cmd2
+   - debug: msg="{{ cmd2.stdout_lines }}"
+...
