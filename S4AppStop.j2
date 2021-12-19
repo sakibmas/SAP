@@ -1,0 +1,25 @@
+#!/bin/sh
+. ~/.profile
+sapcontrol -nr {{ appnr1 }} -function Stop
+sleep 30s
+
+
+hproc=$(sapcontrol -nr {{ appnr1 }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l)
+
+while [ $hproc -gt 2 ]
+do
+  sleep 30s
+  hproc=$(sapcontrol -nr {{ appnr1 }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l)
+done
+
+
+sapcontrol -nr {{ appnr2 }} -function Stop
+sleep 30s
+
+hproc=$(sapcontrol -nr {{ appnr2 }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l)
+
+while [ $hproc -gt 2 ]
+do
+  sleep 30s
+  hproc=$(sapcontrol -nr {{ appnr2 }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l)
+done

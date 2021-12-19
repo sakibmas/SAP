@@ -1,0 +1,28 @@
+#!/bin/sh
+. ~/.profile
+DbStatus=$(R3trans -dx | grep "^R3trans finished" | cut -d '(' -f 2 | sed 's/[).]//g' )
+
+if [ $DbStatus == "0000" ]
+then
+ sapcontrol -nr {{ appnr2 }} -function Start
+ sleep 30s
+
+ hproc=$(sapcontrol -nr {{ appnr2 }} -function GetProcessList | grep GREEN | wc -l)
+
+ while [ $hproc -lt 2 ]
+ do
+  sleep 30s
+  hproc=$(sapcontrol -nr {{ appnr2 }} -function GetProcessList | grep GREEN | wc -l)
+ done
+
+ sapcontrol -nr {{ appnr1 }} -function Start
+ sleep 30s
+
+ hproc=$(sapcontrol -nr {{ appnr1 }} -function GetProcessList | grep GREEN | wc -l)
+
+ while [ $hproc -lt 4 ]
+ do
+  sleep 30s
+  hproc=$(sapcontrol -nr {{ appnr1 }} -function GetProcessList | grep GREEN | wc -l)
+ done
+fi

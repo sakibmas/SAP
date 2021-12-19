@@ -1,0 +1,15 @@
+---
+- hosts: "{{ host }}"
+  user: root
+  become_user: "{{ appadm }}"
+  gather_facts: yes
+  tasks:
+   - template:
+      src: S4AppStart.j2
+      dest: ~/S4AppStart.sh
+      mode: 0755
+   - shell: ~/S4AppStart.sh
+     ignore_errors: yes
+     register: cmd2
+   - debug: msg="{{ cmd2.stdout_lines }}"
+...
