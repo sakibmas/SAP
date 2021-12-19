@@ -10,6 +10,7 @@
       mode: 0755
    - script:
       cmd: ~/HanaDbStopV2.sh
+      remote_src: yes
      register: cmd2
    - debug: msg="{{ cmd2.stdout_lines }}"
 ...
