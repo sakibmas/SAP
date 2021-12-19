@@ -1,8 +1,9 @@
-#!/bin/bash
-. ~/.bashrc
-. ~/.profile
+#!/bin/sh
+. ~/.bash_profile
 sapcontrol -nr {{ dbnr }} -function StopSystem HDB
 
+whoami
+echo $SHELL
 hproc=$( sapcontrol -nr {{ dbnr }} -function GetProcessList | grep "Stopped\|Stopping" | wc -l )
 echo $hproc
 
